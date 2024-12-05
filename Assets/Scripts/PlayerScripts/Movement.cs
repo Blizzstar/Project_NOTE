@@ -7,13 +7,14 @@ public class Movement : MonoBehaviour
     //TowerRotatiingComponents
     [SerializeField] private Transform towerRotator;
     [SerializeField] private Transform towerRotatorStartPos;
-    [SerializeField] private Transform leftSideCheck;
-    [SerializeField] private Transform rightSideCheck;
+    //[SerializeField] private Transform leftSideCheck;
+    //[SerializeField] private Transform rightSideCheck;
     [SerializeField] private LayerMask playerCollisionMask;
-    
+    [SerializeField] private DoubleJump playerScript;
+
     //TowerRotatingVariables
     private float rotationSpeed = 25f;
-    private float direction;
+    public float direction;
     private float sideDistance = 0.18f;
     private bool isCollidingFromLeftSide;
     private bool isCollidingFromRightSide;
@@ -44,7 +45,24 @@ public class Movement : MonoBehaviour
         MoveRight();
     }
 
-    private void MoveLeft()
+    /*private void TowerMovementScript()
+    {
+        if (Input.GetKey(KeyCode.A))
+        {
+            direction = -1f;
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            direction = 1f;
+        }
+        else
+        {
+            direction = 0f;
+        }
+        RotateFunction();
+    }*/
+
+    /*private void MoveLeft()
     {
         isCollidingFromRightSide = Physics.CheckSphere(rightSideCheck.position, sideDistance, playerCollisionMask);
 
@@ -72,9 +90,39 @@ public class Movement : MonoBehaviour
         {
             direction = 0f;
         }
+    }*/
+
+    private void MoveLeft()
+    {
+        isCollidingFromRightSide = Physics.CheckSphere(playerScript.rightSideCheck.position, sideDistance, playerCollisionMask);
+
+        if (Input.GetKey(KeyCode.A) && !isCollidingFromRightSide)
+        {
+            direction = -1f;
+            RotateFunction();
+        }
+        else
+        {
+            direction = 0f;
+        }
     }
 
-    private void RotateFunction()
+    private void MoveRight()
+    {
+        isCollidingFromLeftSide = Physics.CheckSphere(playerScript.leftSideCheck.position, -sideDistance, playerCollisionMask);
+
+        if (Input.GetKey(KeyCode.D) && !isCollidingFromLeftSide)
+        {
+            direction = 1f;
+            RotateFunction();
+        }
+        else
+        {
+            direction = 0f;
+        }
+    }
+
+    public void RotateFunction()
     {
         transform.Rotate(new Vector3(movementSciptNullVariable, direction * rotationSpeed * Time.deltaTime, movementSciptNullVariable));
     }

@@ -9,10 +9,13 @@ public class DoubleJump : MonoBehaviour
     [SerializeField] private CharacterController controller;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundMask;
+    [SerializeField] private Movement tower;
+    public Transform leftSideCheck;
+    public Transform rightSideCheck;
 
     //JumpingVariables
     private float gravity = -10f;
-    private float groundDistance = 0.4f;
+    private float groundDistance = 0.1f;
     private float jumpHeight = 3.3f;
     private bool isGrounded;
     private Vector3 velocity;
@@ -32,15 +35,15 @@ public class DoubleJump : MonoBehaviour
 
         if (isGrounded && velocity.y < 0)
         {
-            velocity.y = -2f;
+            velocity.y = 0f;
         }
-        
+
 
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            StartCoroutine(JumpDebug());
+            //StartCoroutine(JumpDebug());
         }
 
         velocity.y += gravity * Time.deltaTime;
@@ -50,7 +53,7 @@ public class DoubleJump : MonoBehaviour
         LockPosition();
     }
 
-    private IEnumerator JumpDebug()
+    /*private IEnumerator JumpDebug()
     {
         yield return new WaitForSeconds(jumpDebugDelayTime);
         consoleDebugJumpCounter++;
@@ -60,12 +63,12 @@ public class DoubleJump : MonoBehaviour
         Debug.Log("                                                                                          " + "Is On The Ground: " + "|====" + isGrounded + "====|");
         Debug.Log("                                                            " + "||" + consoleDebugJumpCounter + "====================" + consoleDebugJumpCounter + "=====================" + consoleDebugJumpCounter + "||");
         Debug.Log("");
-    }
+    } */
     private void LockPosition()
     {
         if ((gameObject.transform.position.x != 0) && (gameObject.transform.position.z != 0))
         {
-            gameObject.transform.position = new Vector3(0, gameObject.transform.position.y, gameObject.transform.position.z);
+            gameObject.transform.position = new Vector3(0f, gameObject.transform.position.y, 63.9f);
         }
     }
 
@@ -74,6 +77,7 @@ public class DoubleJump : MonoBehaviour
         if (other.gameObject.tag == "Ground")
         {
             print("NO ELO");
+            tower.direction = 0f;
         }
-    }
+    }       
 }
